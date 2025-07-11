@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.android.build.gradle.internal.tasks.databinding.DataBindingGenBaseClassesTask
 import com.skydoves.pokedex.Configuration
-import org.gradle.configurationcache.extensions.capitalized
-import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool
 
 plugins {
   alias(libs.plugins.android.application)
@@ -73,19 +70,30 @@ android {
   }
 }
 
-androidComponents {
-  onVariants(selector().all()) { variant ->
-    afterEvaluate {
-      val dataBindingTask =
-        project.tasks.findByName("dataBindingGenBaseClasses" + variant.name.capitalized()) as? DataBindingGenBaseClassesTask
-      if (dataBindingTask != null) {
-        project.tasks.getByName("ksp" + variant.name.capitalized() + "Kotlin") {
-          (this as AbstractKotlinCompileTool<*>).setSource(dataBindingTask.sourceOutFolder)
-        }
-      }
-    }
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+  compilerOptions {
+    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    freeCompilerArgs.addAll(listOf(
+      "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+      "-opt-in=kotlin.time.ExperimentalTime",
+    ))
   }
 }
+
+// TODO: Re-enable KSP data binding integration when API is stable
+// androidComponents {
+//   onVariants(selector().all()) { variant ->
+//     afterEvaluate {
+//       val dataBindingTask =
+//         project.tasks.findByName("dataBindingGenBaseClasses" + variant.name.capitalized()) as? DataBindingGenBaseClassesTask
+//       if (dataBindingTask != null) {
+//         project.tasks.getByName("ksp" + variant.name.capitalized() + "Kotlin") {
+//           (this as AbstractKotlinCompileTool<*>).setSource(dataBindingTask.sourceOutFolder)
+//         }
+//       }
+//     }
+//   }
+// }
 
 dependencies {
   // modules

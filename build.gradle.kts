@@ -77,13 +77,8 @@ subprojects {
     }
   }
 
-  tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions.jvmTarget = bytecodeVersion.toString()
-    kotlinOptions.freeCompilerArgs += listOf(
-      "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-      "-opt-in=kotlin.time.ExperimentalTime",
-    )
-  }
+  // Kotlin compiler options will be configured in individual modules
+  // to avoid conflicts with KSP tasks
 
   extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension> {
     val buildDirectory = layout.buildDirectory.asFileTree

@@ -24,6 +24,16 @@ android {
   namespace = "com.skydoves.pokedex.core.data"
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+  compilerOptions {
+    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    freeCompilerArgs.addAll(listOf(
+      "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+      "-opt-in=kotlin.time.ExperimentalTime",
+    ))
+  }
+}
+
 dependencies {
   api(projects.coreModel)
   implementation(projects.coreNetwork)
