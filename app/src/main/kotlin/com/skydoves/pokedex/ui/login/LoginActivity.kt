@@ -14,61 +14,64 @@
  * limitations under the License.
  */
 
-package com.skydoves.pokedex.ui.main
+package com.skydoves.pokedex.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.skydoves.bindables.BindingActivity
 import com.skydoves.pokedex.R
-import com.skydoves.pokedex.databinding.ActivityMainBinding
-import com.skydoves.pokedex.ui.splash.SplashActivity
-import com.skydoves.pokedex.utils.UserManager
-import com.skydoves.transformationlayout.onTransformationStartContainer
+import com.skydoves.pokedex.databinding.ActivityLoginBinding
+import com.skydoves.pokedex.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
+class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
 
   @get:VisibleForTesting
-  internal val viewModel: MainViewModel by viewModels()
-
-  @Inject
-  lateinit var userManager: UserManager
+  internal val viewModel: LoginViewModel by viewModels()
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    onTransformationStartContainer()
     super.onCreate(savedInstanceState)
+    
     binding {
-      adapter = PokemonAdapter()
       vm = viewModel
+      lifecycleOwner = this@LoginActivity
     }
+
+    observeLoginResult()
   }
 
-  override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-    menuInflater.inflate(R.menu.menu_main, menu)
-    return true
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    return when (item.itemId) {
-      R.id.action_logout -> {
-        logout()
-        true
+  private fun observeLoginResult() {
+    lifecycleScope.launch {
+      repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.loginResult.collect { result ->
+          when (result) {
+            is LoginResult.Success -> {
+              navigateToMain()
+            }
+            is LoginResult.Error -> {
+              Toast.makeText(this@LoginActivity, result.message, Toast.LENGTH_SHORT).show()
+            }
+            LoginResult.Idle -> {
+              // 无操作
+            }
+          }
+        }
       }
-      else -> super.onOptionsItemSelected(item)
     }
   }
 
-  private fun logout() {
-    userManager.logout()
-    val intent = Intent(this, SplashActivity::class.java)
+  private fun navigateToMain() {
+    val intent = Intent(this, MainActivity::class.java)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     startActivity(intent)
     finish()
   }
-}
+} 

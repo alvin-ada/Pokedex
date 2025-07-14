@@ -29,7 +29,7 @@
     tools:ignore="AllowBackup">
 
     <activity
-      android:name=".ui.main.MainActivity"
+      android:name=".ui.splash.SplashActivity"
       android:exported="true"
       android:launchMode="singleTop">
       <intent-filter>
@@ -37,6 +37,16 @@
 
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
+    </activity>
+
+    <activity
+      android:name=".ui.login.LoginActivity"
+      android:launchMode="singleTop">
+    </activity>
+
+    <activity
+      android:name=".ui.main.MainActivity"
+      android:launchMode="singleTop">
     </activity>
 
     <activity
