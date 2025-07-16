@@ -1,19 +1,20 @@
 /*
- * Designed and developed by 2022 skydoves (Jaewoong Eum)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Constant.kt - 基准测试常量定义
+ * 
+ * 🎯 作用：定义基准测试中使用的常量
+ * 📱 模块：benchmark - 性能测试模块
+ * 🔗 功能：提供测试目标应用的包名等常量
  */
 
 package com.github.skydoves.benchmark
 
+// 🔥 应用包名常量
+// 📌 internal：模块内部可见
+// 📌 const：编译时常量
+// 📌 作用：指定要测试的目标应用包名
 internal const val PACKAGE_NAME: String = "com.skydoves.pokedex"
+
+// 💡 用法：在基准测试中用于指定测试目标应用
+// 📌 启动测试：measureRepeated(packageName = PACKAGE_NAME, ...)
+// 📌 配置文件：baselineProfileRule.collect(packageName = PACKAGE_NAME, ...)
+// 📌 UI 测试：By.res(PACKAGE_NAME, "resourceId")

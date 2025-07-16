@@ -98,6 +98,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 dependencies {
   // modules
   implementation(projects.coreData)
+  implementation(projects.coreStore)
 
   // modules for unit test
   testImplementation(projects.coreNetwork)

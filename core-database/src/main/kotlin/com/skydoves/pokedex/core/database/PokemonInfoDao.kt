@@ -1,17 +1,9 @@
 /*
- * Designed and developed by 2022 skydoves (Jaewoong Eum)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * PokemonInfoDao.kt - Pokemon 详细信息数据访问对象
+ * 
+ * 🎯 作用：定义 Pokemon 详细信息的数据库操作
+ * 📱 模块：core-database - 数据库层
+ * 🔗 功能：缓存 Pokemon 的详细信息数据
  */
 
 package com.skydoves.pokedex.core.database
@@ -22,12 +14,24 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.skydoves.pokedex.core.database.entity.PokemonInfoEntity
 
+// 🔥 @Dao 注解详解
+// 📌 作用：标记这是 Pokemon 详细信息的数据访问对象
+// 📌 特点：专门处理单个 Pokemon 的详细信息
+// 📌 用途：避免重复请求相同的 Pokemon 详情
 @Dao
 interface PokemonInfoDao {
 
+  // 🔥 插入 Pokemon 详细信息
+  // 📌 OnConflictStrategy.REPLACE：如果已存在同名 Pokemon，替换数据
+  // 📌 用途：缓存从网络获取的 Pokemon 详细信息
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun insertPokemonInfo(pokemonInfo: PokemonInfoEntity)
+  // 💡 用法：当用户点击 Pokemon 获取详情后，缓存到本地
 
+  // 🔥 查询 Pokemon 详细信息
+  // 📌 根据 Pokemon 名称查询：name 是唯一标识
+  // 📌 返回类型：PokemonInfoEntity?（可能为空）
   @Query("SELECT * FROM PokemonInfoEntity WHERE name = :name_")
   suspend fun getPokemonInfo(name_: String): PokemonInfoEntity?
+  // 💡 用法：用户点击 Pokemon 时，先检查本地是否有缓存的详细信息
 }

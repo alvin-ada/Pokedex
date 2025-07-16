@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Designed and developed by 2022 skydoves (Jaewoong Eum)
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+    AndroidManifest.xml - Benchmark 模块清单文件
+    
+    🎯 作用：配置基准测试模块的 Android 清单信息
+    📱 模块：benchmark - 性能测试模块
+    🔗 功能：声明测试模块的权限和查询配置
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+  <!-- 🔥 查询配置 -->
+  <!-- 📌 作用：声明这个测试模块需要查询的目标应用 -->
+  <!-- 📌 Android 11+：需要明确声明要查询的应用包名 -->
   <queries>
+    <!-- 🔥 目标应用包名 -->
+    <!-- 📌 package：指定要测试的目标应用包名 -->
+    <!-- 📌 作用：允许基准测试模块查询和操作目标应用 -->
+    <!-- 📌 用途：启动应用、获取应用信息、UI 自动化等 -->
     <package android:name="com.skydoves.pokedex" />
   </queries>
+  
+  <!-- 💡 用法：确保基准测试模块能够访问和测试目标应用 -->
+  <!-- 📌 权限：在 Android 11+ 上必须声明查询权限 -->
+  <!-- 📌 安全：遵循 Android 的包可见性规则 -->
 </manifest>
